@@ -11,6 +11,8 @@ pnpm install
 pnpm dev
 ```
 
+pnpm is required: npm 12 refuses to install the SDK's GitHub Release tarball unless you pass `--allow-remote=all`.
+
 Open <http://localhost:5173>. The site talks to the public `https://corino-demo.moonbase.sh` tenant by default, which already allows that origin. To point it at your own tenant, create `.env.local`:
 
 ```ini
@@ -36,7 +38,7 @@ Account area, licence activation, and the custom-storefront callback pages are t
 pnpm test:e2e
 ```
 
-Builds the app and runs Playwright against it on port 5173, plus a second server on port 3100 pointed at a broken endpoint to verify the unavailable page. Set `E2E_SIGNUP=1` to also run the signup test, which creates a throwaway account on the demo tenant.
+Builds the app and runs Playwright against it on port 5173, plus a second server on port 3100 pointed at a broken endpoint to verify the unavailable page. A signup test behind `E2E_SIGNUP=1` is planned for the account milestone; nothing in CI creates accounts. The browser tests add items to a cart on the shared demo tenant (open orders only, never payments).
 
 Manual check that automation cannot cover: open checkout, pay with Moonbase's test card, confirm you land on `/order-completed`.
 

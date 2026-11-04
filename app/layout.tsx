@@ -31,6 +31,7 @@ async function boot(): Promise<Boot> {
     if (initialState.closed) return { kind: 'closed' }
     return { kind: 'ok', endpoint, initialState }
   } catch (err) {
+    console.error('[corino] storefront boot failed', err)
     // Moonbase's API client reads `window` on its error path in Node, so a 404 or 5xx
     // can arrive as a ReferenceError rather than a typed error. Degrade, never crash.
     return { kind: err instanceof StoreClosedError ? 'closed' : 'unavailable' }

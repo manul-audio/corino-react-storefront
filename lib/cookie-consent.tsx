@@ -43,6 +43,13 @@ export function CookieConsentProvider({
     [context],
   )
 
+  // The SSR catalog reflects the server's location. Refetch once in the browser so
+  // cookieConsentRequired and suggestedCurrency are this visitor's; the subscription
+  // above is already in place when this runs.
+  useEffect(() => {
+    void context.updateStorefront().catch(() => {})
+  }, [context])
+
   const setAnswer = useCallback(
     (granted: boolean) => {
       window.localStorage.setItem(ANSWER_KEY, String(granted))
