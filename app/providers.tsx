@@ -3,6 +3,9 @@
 import { StorefrontProvider, type StorefrontHydrationState } from '@moonbase.sh/react'
 import { useMemo, useState, type ReactNode } from 'react'
 import { CheckoutCompletion } from '@/components/CheckoutCompletion'
+import { DemoBanner } from '@/components/DemoBanner'
+import { SiteFooter } from '@/components/SiteFooter'
+import { SiteNav } from '@/components/SiteNav'
 import { CookieConsentProvider, readStoredConsent } from '@/lib/cookie-consent'
 import { UiProvider } from '@/lib/ui-context'
 
@@ -27,7 +30,10 @@ export function Providers({
       <UiProvider>
         <CookieConsentProvider initialAnswer={consent}>
           <CheckoutCompletion />
+          <DemoBanner />
+          <SiteNav />
           {children}
+          <SiteFooter />
         </CookieConsentProvider>
       </UiProvider>
     </StorefrontProvider>
