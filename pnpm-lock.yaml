@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@moonbase.sh/react':
-        specifier: https://github.com/manul-audio/moonbase-react/releases/download/v0.1.0/moonbase.sh-react-0.1.0.tgz
-        version: https://github.com/manul-audio/moonbase-react/releases/download/v0.1.0/moonbase.sh-react-0.1.0.tgz(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+        specifier: https://github.com/manul-audio/moonbase-react/releases/download/v0.1.1/moonbase.sh-react-0.1.1.tgz
+        version: https://github.com/manul-audio/moonbase-react/releases/download/v0.1.1/moonbase.sh-react-0.1.1.tgz(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       next:
         specifier: 16.4.5
         version: 16.4.5(@playwright/test@1.64.1)(@types/node@20.19.43)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
@@ -204,9 +204,9 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@moonbase.sh/react@https://github.com/manul-audio/moonbase-react/releases/download/v0.1.0/moonbase.sh-react-0.1.0.tgz':
-    resolution: {integrity: sha512-uVJAGgitvNkVmFhkjZFVKKFjtkzhSnKi3+REeANJwy+03uxCWD7ZY3BL5ZHuA13RmABx8z/0y8Q5Pt3y1TUsSQ==, tarball: https://github.com/manul-audio/moonbase-react/releases/download/v0.1.0/moonbase.sh-react-0.1.0.tgz}
-    version: 0.1.0
+  '@moonbase.sh/react@https://github.com/manul-audio/moonbase-react/releases/download/v0.1.1/moonbase.sh-react-0.1.1.tgz':
+    resolution: {integrity: sha512-2JGHktngbWSVAsXVdvWR86xYSZok9XSshSAII8SK7p3l4w2+560jeFgsd8VjGst0Uu0qlyWVr354/O24nZFOvg==, tarball: https://github.com/manul-audio/moonbase-react/releases/download/v0.1.1/moonbase.sh-react-0.1.1.tgz}
+    version: 0.1.1
     peerDependencies:
       react: ^18.0.0 || ^19.0.0
       react-dom: ^18.0.0 || ^19.0.0
@@ -543,7 +543,7 @@ snapshots:
   '@img/sharp-win32-x64@0.35.5':
     optional: true
 
-  '@moonbase.sh/react@https://github.com/manul-audio/moonbase-react/releases/download/v0.1.0/moonbase.sh-react-0.1.0.tgz(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)':
+  '@moonbase.sh/react@https://github.com/manul-audio/moonbase-react/releases/download/v0.1.1/moonbase.sh-react-0.1.1.tgz(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)':
     dependencies:
       '@moonbase.sh/storefront-api': 3.12.0
       react: 19.3.0
