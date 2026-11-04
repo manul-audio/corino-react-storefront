@@ -17,5 +17,6 @@ test('signing in shows the account area and the products tab loads', async ({ pa
   await expect(page.locator('.account-tabs')).toBeVisible()
   await expect(page.locator('.account-email')).toContainText('@')
   await page.locator('.account-tabs').getByRole('tab', { name: 'Products' }).click()
-  await expect(page.locator('.account-panel')).not.toContainText('Loading')
+  await expect(page).toHaveURL(/\/account\/products$/)
+  await expect(page.locator('.account-panel')).toContainText(/product|don't own/i)
 })
