@@ -14,10 +14,19 @@ const BASE = Array.from({ length: N }, (_, i) => {
   return Math.max(0.05, decay + wobble)
 })
 
+// Server and browser JavaScript engines can disagree in the last digit of Math.sin
+// and **. Fixed precision keeps the server markup identical to the hydration render.
+const round = (value: number) => Number(value.toFixed(2))
+
 function barsAt(phase: number) {
   return BASE.map((b, i) => {
     const animated = b * (0.7 + 0.3 * Math.abs(Math.sin((phase + i) * 0.4)))
-    return { x: i * (W / N), width: BAR_WIDTH, y: H - animated * H, height: animated * H }
+    return {
+      x: round(i * (W / N)),
+      width: round(BAR_WIDTH),
+      y: round(H - animated * H),
+      height: round(animated * H),
+    }
   })
 }
 
