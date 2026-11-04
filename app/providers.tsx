@@ -1,8 +1,10 @@
 'use client'
 
 import { StorefrontProvider, type StorefrontHydrationState } from '@moonbase.sh/react'
-import { useMemo, useState, type ReactNode } from 'react'
+import { Suspense, useMemo, useState, type ReactNode } from 'react'
+import { CartDrawer } from '@/components/CartDrawer'
 import { CheckoutCompletion } from '@/components/CheckoutCompletion'
+import { DeepLinkCart } from '@/components/DeepLinkCart'
 import { DemoBanner } from '@/components/DemoBanner'
 import { SiteFooter } from '@/components/SiteFooter'
 import { SiteNav } from '@/components/SiteNav'
@@ -34,6 +36,10 @@ export function Providers({
           <SiteNav />
           {children}
           <SiteFooter />
+          <CartDrawer />
+          <Suspense fallback={null}>
+            <DeepLinkCart />
+          </Suspense>
         </CookieConsentProvider>
       </UiProvider>
     </StorefrontProvider>
