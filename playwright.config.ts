@@ -14,6 +14,7 @@ export default defineConfig({
       testIgnore: /unavailable\.spec\.ts/,
       use: { baseURL: 'http://localhost:5173' },
     },
+    { name: 'unavailable', testMatch: /unavailable\.spec\.ts/, use: { baseURL: 'http://localhost:3100' } },
   ],
   webServer: [
     {
@@ -21,6 +22,13 @@ export default defineConfig({
       url: 'http://localhost:5173',
       reuseExistingServer: !process.env.CI,
       timeout: 60_000,
+    },
+    {
+      command: 'pnpm exec next start -p 3100',
+      url: 'http://localhost:3100',
+      reuseExistingServer: !process.env.CI,
+      timeout: 60_000,
+      env: { MOONBASE_ENDPOINT: 'https://corino-demo.moonbase.sh/does-not-exist' },
     },
   ],
 })
