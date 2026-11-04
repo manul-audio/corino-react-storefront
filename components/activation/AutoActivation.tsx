@@ -28,12 +28,14 @@ export function AutoActivation({ token }: { token: string }) {
   // Auto-fulfil the moment the user has an eligible licence, as the embedded storefront does.
   const requestStatus = activationRequest?.status ?? null
   const eligible = Boolean(activationRequest?.licenseEligibility?.eligible)
+  // Once an attempt has failed (SDK `error` or a rejection) do not try again: the SDK
+  // resets `fulfilling` after a failure, which would otherwise re-trigger this effect.
+  const failed = Boolean(error) || activationError !== null
   useEffect(() => {
-    if (!fulfilling && !completing && requestStatus === ActivationRequestStatus.Requested && eligible) {
-      // The SDK does not catch failures in fulfillLicense; guard here so they surface.
+    if (!fulfilling && !completing && !failed && requestStatus === ActivationRequestStatus.Requested && eligible) {
       fulfillLicense().catch((err: unknown) => setActivationError(err instanceof Error ? err.message : String(err)))
     }
-  }, [fulfilling, completing, requestStatus, eligible, fulfillLicense])
+  }, [fulfilling, completing, failed, requestStatus, eligible, fulfillLicense])
 
   function buy() {
     if (!storefrontProduct) return
