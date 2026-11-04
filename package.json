@@ -1,0 +1,27 @@
+{
+  "name": "corino-react-storefront",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@10.34.5",
+  "scripts": {
+    "dev": "next dev -p 5173",
+    "build": "next build",
+    "start": "next start -p 5173",
+    "type-check": "tsc --noEmit",
+    "test:e2e": "pnpm build && playwright test",
+    "test:e2e:ui": "playwright test --ui"
+  },
+  "dependencies": {
+    "@moonbase.sh/react": "https://github.com/manul-audio/moonbase-react/releases/download/v0.1.1/moonbase.sh-react-0.1.1.tgz",
+    "next": "16.4.5",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.1",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "typescript": "^5"
+  }
+}
