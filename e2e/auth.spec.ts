@@ -14,3 +14,8 @@ test('/account/products and /account/redeem are gated the same way', async ({ pa
   await page.goto('/account/redeem')
   await expect(page.locator('.account-signed-out')).toBeVisible()
 })
+
+test('/account/products/halo is gated when signed out', async ({ page }) => {
+  await page.goto('/account/products/halo')
+  await expect(page.locator('.account-signed-out')).toBeVisible()
+})
