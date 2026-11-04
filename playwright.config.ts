@@ -12,13 +12,13 @@ export default defineConfig({
     {
       name: 'main',
       testIgnore: /unavailable\.spec\.ts/,
-      use: { baseURL: 'http://localhost:3000' },
+      use: { baseURL: 'http://localhost:5173' },
     },
   ],
   webServer: [
     {
       command: 'pnpm start',
-      url: 'http://localhost:3000',
+      url: 'http://localhost:5173',
       reuseExistingServer: !process.env.CI,
       timeout: 60_000,
     },
