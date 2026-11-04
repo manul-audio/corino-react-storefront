@@ -14,6 +14,7 @@ export function AutoActivation({ token }: { token: string }) {
   const { currency, addToCart, setQuantity } = useCart()
   const { activationRequest, loading, fulfilling, completing, error, fulfillLicense, fulfillTrial } = useActivationRequest(token)
   const [newsletterOptIn, setNewsletterOptIn] = useState(false)
+  const [activationError, setActivationError] = useState<string | null>(null)
 
   const storefrontProduct = useProduct(activationRequest?.product.id ?? '')
   const purchasable = Boolean(storefrontProduct?.defaultVariation)
@@ -29,7 +30,8 @@ export function AutoActivation({ token }: { token: string }) {
   const eligible = Boolean(activationRequest?.licenseEligibility?.eligible)
   useEffect(() => {
     if (!fulfilling && !completing && requestStatus === ActivationRequestStatus.Requested && eligible) {
-      void fulfillLicense()
+      // The SDK does not catch failures in fulfillLicense; guard here so they surface.
+      fulfillLicense().catch((err: unknown) => setActivationError(err instanceof Error ? err.message : String(err)))
     }
   }, [fulfilling, completing, requestStatus, eligible, fulfillLicense])
 
@@ -97,6 +99,7 @@ export function AutoActivation({ token }: { token: string }) {
   } else {
     body = (
       <div className="activation-options">
+        {activationError ? <p className="error">{activationError}</p> : null}
         {purchasable && storefrontProduct && defaultVariation ? (
           <section className="activation-option">
             <h3>Option 1 · Purchase product</h3>

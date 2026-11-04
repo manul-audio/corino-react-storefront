@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState, type ChangeEvent, type DragEvent } from 'react'
+import { useState, type ChangeEvent, type DragEvent } from 'react'
 
 export function DeviceTokenInput({ error, accept, onToken, onError }: {
   error: Error | null
@@ -9,7 +9,6 @@ export function DeviceTokenInput({ error, accept, onToken, onError }: {
   onError: (err: Error) => void
 }) {
   const [hovering, setHovering] = useState(false)
-  const fileInput = useRef<HTMLInputElement | null>(null)
 
   function handleFile(file: File) {
     const reader = new FileReader()
@@ -37,6 +36,8 @@ export function DeviceTokenInput({ error, accept, onToken, onError }: {
       return
     }
     handleFile(files[0])
+    // Reset so choosing the same file again still fires onChange.
+    event.target.value = ''
   }
 
   function setHover(next: boolean) {
@@ -65,7 +66,6 @@ export function DeviceTokenInput({ error, accept, onToken, onError }: {
       </label>
       <input
         id="device-token-input"
-        ref={fileInput}
         type="file"
         accept={accept || '.dt'}
         onChange={handleInput}

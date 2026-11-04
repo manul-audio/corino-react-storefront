@@ -10,6 +10,7 @@ export function AccountProductDetail({ productId }: { productId: string }) {
   const { getProduct, downloadProduct, getProductActivations, getProductLicenses, revokeActivation } = useInventory()
   const [product, setProduct] = useState<OwnedProduct | null>(null)
   const [loadError, setLoadError] = useState<string | null>(null)
+  const [actionError, setActionError] = useState<string | null>(null)
   const [activations, setActivations] = useState<Activation[] | null>(null)
   const [licenses, setLicenses] = useState<License[] | null>(null)
   const [downloading, setDownloading] = useState<Set<string>>(new Set())
@@ -56,17 +57,20 @@ export function AccountProductDetail({ productId }: { productId: string }) {
   const totalLicenses = (product?.numberOfLicenses ?? 0) + (product?.subscriptionLicenses ?? 0)
 
   async function startDownload(download: Download) {
+    setActionError(null)
     setDownloading((s) => new Set(s).add(download.key))
     try {
       await downloadProduct(download)
     } catch (err) {
       console.error('Download failed', err)
+      setActionError((err as Error).message)
     } finally {
       setDownloading((s) => { const n = new Set(s); n.delete(download.key); return n })
     }
   }
 
   async function revoke(activation: Activation) {
+    setActionError(null)
     setRevoking((s) => new Set(s).add(activation.id))
     try {
       await revokeActivation(activation)
@@ -74,6 +78,7 @@ export function AccountProductDetail({ productId }: { productId: string }) {
       setProduct((p) => p ? { ...p, currentActivations: Math.max(0, (p.currentActivations ?? 1) - 1) } : p)
     } catch (err) {
       console.error('Revoke failed', err)
+      setActionError((err as Error).message)
     } finally {
       setRevoking((s) => { const n = new Set(s); n.delete(activation.id); return n })
     }
@@ -103,6 +108,8 @@ export function AccountProductDetail({ productId }: { productId: string }) {
               {product.version ? <p className="hint">Version {product.version}</p> : null}
             </div>
           </header>
+
+          {actionError ? <p className="error">{actionError}</p> : null}
 
           <section className="detail-section">
             <h4>Downloads</h4>

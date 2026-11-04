@@ -41,9 +41,9 @@ export default function LoginPage() {
     <AuthPage eyebrow="LOG IN" title="Sign in" hint="Sign in to manage your account, downloads, and licenses.">
       {mounted ? (
         <form className="account-form" onSubmit={submit}>
-          <label htmlFor="login-email">Email</label>
+          <label htmlFor="login-page-email">Email</label>
           <input
-            id="login-email"
+            id="login-page-email"
             type="email"
             autoComplete="email"
             required
@@ -51,9 +51,9 @@ export default function LoginPage() {
             onChange={(e) => setEmail(e.target.value)}
           />
 
-          <label htmlFor="login-password">Password</label>
+          <label htmlFor="login-page-password">Password</label>
           <input
-            id="login-password"
+            id="login-page-password"
             type="password"
             autoComplete="current-password"
             required
