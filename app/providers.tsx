@@ -3,6 +3,7 @@
 import { StorefrontProvider, type StorefrontHydrationState } from '@moonbase.sh/react'
 import { Suspense, useMemo, useState, type ReactNode } from 'react'
 import { CartDrawer } from '@/components/CartDrawer'
+import { CookieBanner } from '@/components/CookieBanner'
 import { CheckoutCompletion } from '@/components/CheckoutCompletion'
 import { DeepLinkCart } from '@/components/DeepLinkCart'
 import { DemoBanner } from '@/components/DemoBanner'
@@ -41,6 +42,7 @@ export function Providers({
           <CartDrawer />
           <LoginModal />
           <ProductDownloadModal />
+          <CookieBanner />
           <Suspense fallback={null}>
             <DeepLinkCart />
           </Suspense>

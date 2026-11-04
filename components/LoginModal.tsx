@@ -4,6 +4,7 @@ import { useAuth } from '@moonbase.sh/react'
 import Link from 'next/link'
 import { useState, type FormEvent } from 'react'
 import { Portal } from '@/components/Portal'
+import { useEscapeKey } from '@/lib/use-escape'
 import { useUi } from '@/lib/ui-context'
 
 export function LoginModal() {
@@ -30,13 +31,15 @@ export function LoginModal() {
     }
   }
 
+  useEscapeKey(loginOpen, hideLogin)
+
   if (!loginOpen) return null
 
   return (
     <Portal>
       <div className="modal-mask" onClick={hideLogin}>
-        <form className="modal" onClick={(e) => e.stopPropagation()} onSubmit={tryLogin}>
-          <h2>Sign in</h2>
+        <form className="modal" role="dialog" aria-modal="true" aria-labelledby="login-modal-title" onClick={(e) => e.stopPropagation()} onSubmit={tryLogin}>
+          <h2 id="login-modal-title">Sign in</h2>
           <label htmlFor="login-email">Email</label>
           <input id="login-email" type="email" required autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} />
           <label htmlFor="login-password">Password</label>

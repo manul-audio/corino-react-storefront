@@ -1,14 +1,12 @@
-'use client'
-
-import { useStorefront } from '@moonbase.sh/react'
+import { BootMarker } from '@/components/BootMarker'
 import { BundleSection } from '@/components/BundleSection'
 import { DriftArt } from '@/components/DriftArt'
 import { FeaturesSection } from '@/components/FeaturesSection'
 import { HaloArt } from '@/components/HaloArt'
 import { HeroSection } from '@/components/HeroSection'
 import { PluginCard } from '@/components/PluginCard'
+import { TrialButton } from '@/components/TrialButton'
 import { TrustSection } from '@/components/TrustSection'
-import { useUi } from '@/lib/ui-context'
 
 const TRIAL_ICON = (
   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -26,14 +24,12 @@ function Spec({ label, value }: { label: string; value: string }) {
 }
 
 export default function Home() {
-  const { storefront, loaded } = useStorefront()
-  const { showTrial } = useUi()
-
   return (
     <div>
       <HeroSection />
 
-      <div id="plugins" className="section-head" data-boot={loaded ? 'ok' : 'loading'} data-products={storefront.products.length}>
+      <div id="plugins" className="section-head">
+        <BootMarker />
         <div className="section-num">[01 / PLUGINS]</div>
         <div className="section-title">The instruments — two precise tools for tone and space.</div>
         <div className="section-aside">PAGE 01—02 OF 04</div>
@@ -57,7 +53,7 @@ export default function Home() {
         tagline="Tape, tubes & transformer color in one warm box."
         desc="A psychoacoustic saturator built from a year of tape machine measurements. Three stages — preamp, head bump, and bias — each modeled with a per-frequency response so the lows breathe and the highs stay glassy. Push it for ten dB of glow on the mix bus, or sit it on a vocal at 1% for the kind of warmth that just gets out of the way."
         specs={<><Spec label="STAGES" value="3 + Bias" /><Spec label="OVERSAMPLING" value="×16" /><Spec label="CPU @ 96k" value="0.4%" /><Spec label="PRESETS" value="128" /></>}
-        trial={<button type="button" className="trial-btn" onClick={() => showTrial('halo')}>{TRIAL_ICON} Try HALO free · 14 days</button>}
+        trial={<TrialButton productId="halo">{TRIAL_ICON} Try HALO free · 14 days</TrialButton>}
       />
 
       <PluginCard
@@ -79,7 +75,7 @@ export default function Home() {
         tagline="A reverb that thinks in particles, not rooms."
         desc="DRIFT shreds incoming audio into a cloud of 1,024 grains, then suspends them in a tunable field of pitch, time and space. The result sits somewhere between reverb, delay and synthesis — perfect for ambient pads, dimensional vocals, or pulling a kick drum into a 14-second tail without losing its punch. Modulation runs internally so motion is built in, not bolted on."
         specs={<><Spec label="GRAINS" value="1024" /><Spec label="MAX TAIL" value="∞" /><Spec label="PITCH RANGE" value="±48 st" /><Spec label="PRESETS" value="160" /></>}
-        trial={<button type="button" className="trial-btn" onClick={() => showTrial('drift')}>{TRIAL_ICON} Try DRIFT free · 14 days</button>}
+        trial={<TrialButton productId="drift">{TRIAL_ICON} Try DRIFT free · 14 days</TrialButton>}
       />
 
       <BundleSection />
