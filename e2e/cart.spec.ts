@@ -19,3 +19,11 @@ test('?add_product=halo deep link opens the drawer with HALO', async ({ page }) 
   await expect(drawer).toBeVisible()
   await expect(drawer.locator('.cart-line .name')).toContainText('HALO')
 })
+
+test('the drawer is a dialog and closes on Escape', async ({ page }) => {
+  await page.goto('/?add_product=halo')
+  const drawer = page.getByRole('dialog', { name: 'Basket' })
+  await expect(drawer).toBeVisible()
+  await page.keyboard.press('Escape')
+  await expect(drawer).toHaveCount(0)
+})
