@@ -3,7 +3,7 @@
 import { useAuth } from '@moonbase.sh/react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Suspense, useEffect, useState, type FormEvent } from 'react'
+import { Suspense, useEffect, useRef, useState, type FormEvent } from 'react'
 import { AuthPage } from '@/components/AuthPage'
 import { useMounted } from '@/components/Mounted'
 
@@ -27,6 +27,7 @@ function SignUpInner() {
   const [newPassword, setNewPassword] = useState('')
   const [saving, setSaving] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
+  const inflight = useRef<{ key: string; p: ReturnType<typeof confirmAccount> } | null>(null)
 
   useEffect(() => {
     if (!email || !code) {
@@ -35,7 +36,9 @@ function SignUpInner() {
       return
     }
     let cancelled = false
-    confirmAccount(email, code)
+    const key = `${email}:${code}`
+    if (inflight.current?.key !== key) inflight.current = { key, p: confirmAccount(email, code) }
+    inflight.current.p
       .then((result) => {
         if (cancelled) return
         if (result.status === 'PasswordSetupRequired') {
@@ -54,8 +57,7 @@ function SignUpInner() {
     return () => {
       cancelled = true
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- run once per link; SDK callbacks are not stable identities
-  }, [email, code])
+  }, [email, code, confirmAccount, router])
 
   async function submitPassword(event: FormEvent) {
     event.preventDefault()

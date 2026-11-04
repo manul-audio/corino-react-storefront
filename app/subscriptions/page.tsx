@@ -45,8 +45,7 @@ function SubscriptionsInner() {
     return () => {
       cancelled = true
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- load once per subscription id; SDK callbacks are not stable identities
-  }, [loaded, signedIn, subscriptionId])
+  }, [loaded, signedIn, subscriptionId, getSubscription])
 
   return (
     <AuthPage eyebrow="SUBSCRIPTION" title="Manage subscription" hint="View your subscription details.">
@@ -62,7 +61,7 @@ function SubscriptionsInner() {
               Sign in
             </button>
           </div>
-        ) : loading ? (
+        ) : loading || (!subscription && !error) ? (
           <p className="empty">Loading subscription…</p>
         ) : error ? (
           <p className="error">{error}</p>

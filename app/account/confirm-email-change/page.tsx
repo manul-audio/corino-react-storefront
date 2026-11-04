@@ -3,7 +3,7 @@
 import { useAuth } from '@moonbase.sh/react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
-import { Suspense, useEffect, useState } from 'react'
+import { Suspense, useEffect, useRef, useState } from 'react'
 import { AuthPage } from '@/components/AuthPage'
 import { useMounted } from '@/components/Mounted'
 
@@ -21,6 +21,7 @@ function ConfirmEmailChangeInner() {
 
   const [status, setStatus] = useState<Status>('pending')
   const [error, setError] = useState<string | null>(null)
+  const inflight = useRef<{ key: string; p: Promise<unknown> } | null>(null)
 
   useEffect(() => {
     if (!email || !code) {
@@ -29,7 +30,9 @@ function ConfirmEmailChangeInner() {
       return
     }
     let cancelled = false
-    confirmEmailChange(email, code)
+    const key = `${email}:${code}`
+    if (inflight.current?.key !== key) inflight.current = { key, p: confirmEmailChange(email, code) }
+    inflight.current.p
       .then(() => {
         if (!cancelled) setStatus('success')
       })
@@ -41,8 +44,7 @@ function ConfirmEmailChangeInner() {
     return () => {
       cancelled = true
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- run once per link; SDK callbacks are not stable identities
-  }, [email, code])
+  }, [email, code, confirmEmailChange])
 
   return (
     <AuthPage eyebrow="CONFIRM EMAIL CHANGE" title="Email change">
