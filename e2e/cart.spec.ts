@@ -7,7 +7,7 @@ test('adding HALO opens the drawer with one line and a total; removing empties i
   await expect(drawer).toBeVisible()
   await expect(drawer.locator('.cart-line')).toHaveCount(1)
   await expect(drawer.locator('.cart-line .name')).toContainText('HALO')
-  await expect(drawer.locator('.total-amount')).not.toHaveText(/^[$€]?0$/)
+  await expect(drawer.locator('.total-amount')).toHaveText(/[1-9]/)
   await drawer.getByRole('button', { name: 'Remove' }).click()
   await expect(drawer.locator('.cart-line')).toHaveCount(0)
   await expect(drawer.locator('.empty')).toContainText('Your cart is empty')

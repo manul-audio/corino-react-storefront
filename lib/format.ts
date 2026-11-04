@@ -1,3 +1,5 @@
+import { DISPLAY_LOCALE } from './format-currency'
+
 export function formatBytes(bytes: number): string {
   if (!bytes) return '0 B'
   const units = ['B', 'KB', 'MB', 'GB']
@@ -7,5 +9,5 @@ export function formatBytes(bytes: number): string {
 
 export function formatDate(value: string | Date | null | undefined): string {
   if (!value) return ''
-  return new Date(value).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })
+  return new Date(value).toLocaleDateString(DISPLAY_LOCALE, { year: 'numeric', month: 'short', day: 'numeric' })
 }

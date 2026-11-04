@@ -8,6 +8,7 @@ test('initial HTML already contains products and prices (SSR hydration)', async 
   expect(html).toContain('DRIFT')
   expect(html).toMatch(/price-now[^<]*<span>[^<]*<\/span>/)
   expect(html).toMatch(PRICE)
+  expect(html).toMatch(/class="add-btn halo"(?![^>]*disabled)[^>]*>/)
 })
 
 test('landing page shows two plugin cards and the bundle', async ({ page }) => {
