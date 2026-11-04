@@ -1,8 +1,13 @@
 const N = 32
+// Fixed precision: server and browser engines can differ in the last digit of
+// Math.sin and **, which would make these style strings mismatch at hydration.
 const BARS = Array.from({ length: N }, (_, i) => {
   const t = i / N
   const h = Math.sin(t * Math.PI) ** 0.6 * (0.4 + 0.6 * Math.abs(Math.sin(i * 1.3)))
-  return { height: `${h * 100}%`, background: `oklch(${0.6 + h * 0.25} 0.18 ${50 + i * 1.5} / 0.85)` }
+  return {
+    height: `${(h * 100).toFixed(2)}%`,
+    background: `oklch(${(0.6 + h * 0.25).toFixed(3)} 0.18 ${(50 + i * 1.5).toFixed(1)} / 0.85)`,
+  }
 })
 
 const RINGS = [
