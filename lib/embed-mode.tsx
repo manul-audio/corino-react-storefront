@@ -1,7 +1,7 @@
 'use client'
 
 import { useStorefront } from '@moonbase.sh/react'
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 
 export type UiMode = 'default' | 'embedded'
 
@@ -71,6 +71,25 @@ function loadEmbed(endpoint: string): Promise<MoonbaseInstance> {
   return embedPromise
 }
 
+// The embedded storefront and our SDK share one cart: both keep it in localStorage under
+// `moonbase_session` and both reload it on `storage` events. Browsers fire those only in
+// OTHER tabs, so inside one page neither side hears the other's writes. Replaying the event
+// ourselves keeps the two views of the cart together.
+const CART_KEY = 'moonbase_session'
+let lastSyncedCart: string | null | undefined
+
+function syncCart() {
+  const value = window.localStorage.getItem(CART_KEY)
+  // Skip when nothing changed since the last replay, so the two sides cannot echo forever.
+  if (lastSyncedCart !== undefined && value === lastSyncedCart) return
+  lastSyncedCart = value
+  window.dispatchEvent(
+    new StorageEvent('storage', { key: CART_KEY, newValue: value, storageArea: window.localStorage }),
+  )
+}
+
+let embedListenersAttached = false
+
 interface EmbedModeApi {
   mode: UiMode
   setMode: (mode: UiMode) => void
@@ -110,16 +129,27 @@ export function EmbedModeProvider({
     let cancelled = false
     loadEmbed(endpoint)
       .then((moonbase) => {
-        if (cancelled) return
-        const refresh = () => void context.updateUser().catch(() => {})
-        moonbase.on('signed-in', refresh)
-        moonbase.on('signed-out', refresh)
+        // Handlers cannot be removed from the embed, so attach them once.
+        if (cancelled || embedListenersAttached) return
+        embedListenersAttached = true
+        const refreshUser = () => void context.updateUser().catch(() => {})
+        moonbase.on('signed-in', refreshUser)
+        moonbase.on('signed-out', refreshUser)
+        // Cart changes made inside the embed show up in our basket count.
+        moonbase.on('storefront-updated', syncCart)
       })
       .catch((err) => console.error('[corino] embedded storefront failed to load', err))
     return () => {
       cancelled = true
     }
   }, [mode, endpoint, context])
+
+  // Whichever side was used last may have changed the cart; bring the other side up to date.
+  const previousMode = useRef<UiMode | null>(null)
+  useEffect(() => {
+    if (previousMode.current !== null && previousMode.current !== mode) syncCart()
+    previousMode.current = mode
+  }, [mode])
 
   const setMode = useCallback((next: UiMode) => {
     window.localStorage.setItem(MODE_KEY, next)

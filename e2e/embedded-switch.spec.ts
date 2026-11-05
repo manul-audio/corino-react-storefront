@@ -47,3 +47,24 @@ test('in embedded mode our actions call Moonbase instead of opening our own pane
     ])
   await expect(page.locator('aside.drawer')).toHaveCount(0)
 })
+
+test('the cart is shared: our basket picks up changes the embed makes in storage', async ({ page }) => {
+  await page.goto('/?add_product=halo')
+  const group = page.getByRole('group', { name: 'Storefront interface' })
+  await expect(page.locator('aside.drawer .cart-line')).toHaveCount(1)
+  await page.keyboard.press('Escape')
+  await expect(page.locator('.cart-count')).toHaveText('1')
+
+  // Embedded mode must not lose the cart.
+  await group.getByRole('button', { name: 'Embedded' }).click()
+  await expect(page.locator('.cart-count')).toHaveText('1')
+
+  // The embed empties the cart: it writes the shared order to storage, which our own
+  // page is never told about by the browser. Switching back replays it.
+  await page.evaluate(() => {
+    const order = JSON.parse(localStorage.getItem('moonbase_session') ?? '{}')
+    localStorage.setItem('moonbase_session', JSON.stringify({ ...order, items: [] }))
+  })
+  await group.getByRole('button', { name: 'Default' }).click()
+  await expect(page.locator('.cart-count')).toHaveCount(0)
+})
