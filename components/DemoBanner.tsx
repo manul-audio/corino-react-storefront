@@ -12,6 +12,9 @@ export function DemoBanner() {
         .
       </span>
       <UiSwitch />
+      <span className="demo-note">
+        Because of CORS, the demo tenant works only on localhost.
+      </span>
     </div>
   )
 }

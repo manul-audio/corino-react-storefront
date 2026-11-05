@@ -1952,3 +1952,5 @@ footer {
 }
 .ui-switch button:hover { color: var(--fg); }
 .ui-switch button[aria-pressed="true"] { color: var(--fg); background: var(--bg-3); border-color: var(--fg-4); }
+
+.demo-banner .demo-note { color: var(--fg-4); font-style: italic; }
