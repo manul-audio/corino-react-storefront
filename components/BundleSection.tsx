@@ -2,7 +2,7 @@
 
 import { useBundle, useCart, useProduct, type StorefrontProduct } from '@moonbase.sh/react'
 import { formatCurrency } from '@/lib/format-currency'
-import { useUi } from '@/lib/ui-context'
+import { useAddToCart } from '@/lib/use-add-to-cart'
 
 const BUNDLE_ID = 'duo-bundle'
 
@@ -18,8 +18,8 @@ export function BundleSection() {
   const bundle = useBundle(BUNDLE_ID)
   const halo = useProduct('halo')
   const drift = useProduct('drift')
-  const { currency, addToCart } = useCart()
-  const { showCart } = useUi()
+  const { currency } = useCart()
+  const addToCart = useAddToCart()
 
   const price = (p: StorefrontProduct | null, fallback: string) =>
     p?.defaultVariation ? formatCurrency(p.defaultVariation.price[currency], currency) : fallback
@@ -36,7 +36,6 @@ export function BundleSection() {
   function addBundleToCart() {
     if (!bundle) return
     addToCart(bundle)
-    showCart()
   }
 
   return (

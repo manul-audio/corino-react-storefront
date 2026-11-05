@@ -12,15 +12,18 @@ import { ProductDownloadModal } from '@/components/ProductDownloadModal'
 import { SiteFooter } from '@/components/SiteFooter'
 import { SiteNav } from '@/components/SiteNav'
 import { CookieConsentProvider, readStoredConsent } from '@/lib/cookie-consent'
+import { EmbedModeProvider, type UiMode } from '@/lib/embed-mode'
 import { UiProvider } from '@/lib/ui-context'
 
 export function Providers({
   endpoint,
   initialState,
+  defaultMode,
   children,
 }: {
   endpoint: string
   initialState: StorefrontHydrationState
+  defaultMode: UiMode
   children: ReactNode
 }) {
   // Read once on first client render; null on the server. Only feeds the SDK config, never the DOM.
@@ -32,6 +35,7 @@ export function Providers({
 
   return (
     <StorefrontProvider endpoint={endpoint} initialState={initialState} config={config}>
+      <EmbedModeProvider endpoint={endpoint} defaultMode={defaultMode}>
       <UiProvider>
         <CookieConsentProvider initialAnswer={consent}>
           <CheckoutCompletion />
@@ -48,6 +52,7 @@ export function Providers({
           </Suspense>
         </CookieConsentProvider>
       </UiProvider>
+      </EmbedModeProvider>
     </StorefrontProvider>
   )
 }

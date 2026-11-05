@@ -1,3 +1,5 @@
+import { UiSwitch } from '@/components/UiSwitch'
+
 export function DemoBanner() {
   return (
     <div className="demo-banner" role="note">
@@ -9,6 +11,7 @@ export function DemoBanner() {
         </a>
         .
       </span>
+      <UiSwitch />
     </div>
   )
 }

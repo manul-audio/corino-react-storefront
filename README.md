@@ -35,6 +35,7 @@ To exercise the callback pages against your own tenant, set its custom storefron
 - **Licence activation** at `/activate` (`components/activation/`): the online `?token=` flow through `useActivationRequest`, and the offline machine-file upload through `activateProduct(token, ActivationMethod.Offline)`.
 - **Custom-storefront callback pages** for every location Moonbase can redirect to: `/login`, `/sign-up`, `/confirm-email`, `/forgot-password`, `/download`, `/subscriptions`, `/account/confirm-email-change`.
 - **Cookie consent banner** (`components/CookieBanner.tsx`) feeding `setAttributionConsent`.
+- **Embedded storefront switch** in the demo banner: flips between this site's own UI built on the SDK hooks and Moonbase's hosted embedded storefront (cart, sign-in, product details). The choice is remembered per browser; set `CORINO_UI=embedded` on the server to make the embedded storefront the starting mode. Both modes share one cart (the embedded storefront and the SDK use the same browser storage), and the page replays storage events so each side sees the other's changes.
 
 ## Tests
 

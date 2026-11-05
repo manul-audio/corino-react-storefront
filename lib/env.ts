@@ -8,3 +8,14 @@ export function resolveMoonbaseEndpoint(): string {
     DEFAULT_MOONBASE_ENDPOINT
   return raw.replace(/\/+$/, '')
 }
+
+export type DefaultUiMode = 'default' | 'embedded'
+
+/**
+ * Server-side only: which storefront UI a first-time visitor sees. `CORINO_UI=embedded`
+ * starts on Moonbase's embedded storefront; anything else starts on this site's own UI.
+ * Visitors can switch in the footer and their choice is remembered.
+ */
+export function resolveDefaultUiMode(): DefaultUiMode {
+  return process.env.CORINO_UI === 'embedded' ? 'embedded' : 'default'
+}

@@ -1,9 +1,9 @@
 'use client'
 
-import { useBundle, useCart, useProduct } from '@moonbase.sh/react'
+import { useBundle, useProduct } from '@moonbase.sh/react'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useRef } from 'react'
-import { useUi } from '@/lib/ui-context'
+import { useAddToCart } from '@/lib/use-add-to-cart'
 
 /** `?add_product=…` / `?add_bundle=…` marketing links drop the visitor straight into the cart drawer. */
 export function DeepLinkCart() {
@@ -12,8 +12,7 @@ export function DeepLinkCart() {
   const bundleId = params.get('add_bundle') ?? ''
   const product = useProduct(productId)
   const bundle = useBundle(bundleId)
-  const { addToCart } = useCart()
-  const { showCart } = useUi()
+  const addToCart = useAddToCart()
   const handled = useRef(false)
 
   useEffect(() => {
@@ -22,8 +21,7 @@ export function DeepLinkCart() {
     if (!item) return
     handled.current = true
     addToCart(item)
-    showCart()
-  }, [product, bundle, addToCart, showCart])
+  }, [product, bundle, addToCart])
 
   return null
 }
