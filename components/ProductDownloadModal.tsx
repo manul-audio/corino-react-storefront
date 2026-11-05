@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { Portal } from '@/components/Portal'
 import { formatBytes } from '@/lib/format'
 import { detectPlatform, sortDownloads } from '@/lib/platform'
+import { useBodyScrollLock } from '@/lib/use-scroll-lock'
 import { useEscapeKey } from '@/lib/use-escape'
 import { useUi } from '@/lib/ui-context'
 
@@ -50,6 +51,7 @@ export function ProductDownloadModal() {
   }
 
   useEscapeKey(Boolean(downloadModal), hideDownloadModal)
+  useBodyScrollLock(Boolean(downloadModal))
 
   if (!downloadModal) return null
   const downloads = product?.downloads ? sortDownloads(product.downloads, currentPlatform) : []

@@ -4,18 +4,21 @@ import { useCart } from '@moonbase.sh/react'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import { CartLine } from '@/components/CartLine'
+import { CartOfferCard } from '@/components/CartOfferCard'
 import { Portal } from '@/components/Portal'
 import { formatCurrency } from '@/lib/format-currency'
+import { useBodyScrollLock } from '@/lib/use-scroll-lock'
 import { useEscapeKey } from '@/lib/use-escape'
 import { useUi } from '@/lib/ui-context'
 
 export function CartDrawer() {
   const { cartOpen, hideCart } = useUi()
-  const { items, total, currency, checkout } = useCart()
+  const { items, breakdown, checkout } = useCart()
   const pathname = usePathname()
   const [checkingOut, setCheckingOut] = useState(false)
 
-  const totalLabel = total ? formatCurrency(total.amount, total.currency) : formatCurrency(0, currency)
+  const currency = breakdown.currency
+  const money = (amount: number) => formatCurrency(amount, currency)
 
   async function initCheckout() {
     try {
@@ -29,6 +32,7 @@ export function CartDrawer() {
   }
 
   useEscapeKey(cartOpen, hideCart)
+  useBodyScrollLock(cartOpen)
 
   if (!cartOpen) return null
 
@@ -50,9 +54,23 @@ export function CartDrawer() {
         </div>
         {items.length > 0 ? (
           <div className="footer-row">
-            <div className="total">
-              <span className="total-label">Total</span>
-              <span className="total-amount">{totalLabel}</span>
+            <CartOfferCard />
+            <div className="breakdown">
+              <div className="breakdown-row subtotal">
+                <span className="breakdown-label">Subtotal</span>
+                <span className="breakdown-value">{money(breakdown.original)}</span>
+              </div>
+              {breakdown.discount > 0 ? (
+                <div className="breakdown-row saving">
+                  <span className="breakdown-label">You save</span>
+                  <span className="breakdown-value">−{money(breakdown.discount)}</span>
+                </div>
+              ) : null}
+              <div className="total">
+                <span className="total-label">Total</span>
+                <span className="total-amount">{money(breakdown.amount)}</span>
+              </div>
+              <p className="breakdown-note">Sales tax calculated at checkout</p>
             </div>
             <button type="button" className="checkout-btn" disabled={checkingOut} onClick={initCheckout}>
               {checkingOut ? 'Loading…' : 'Checkout'}

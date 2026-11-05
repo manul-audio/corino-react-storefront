@@ -1792,3 +1792,129 @@ footer {
   .drawer { padding: 20px; }
   .cookie-banner { left: 12px; bottom: 12px; width: calc(100vw - 24px); }
 }
+
+/* ───────────────── Auth drawer ───────────────── */
+.auth-drawer header { margin-bottom: 8px; }
+.auth-drawer h2 { margin: 0 0 4px; }
+.auth-drawer-hint {
+  margin: 0 0 24px;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 11px;
+  color: var(--fg-3);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.auth-form { display: flex; flex-direction: column; gap: 16px; }
+.auth-form label {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 11px;
+  color: var(--fg-3);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.auth-form input[type="text"],
+.auth-form input[type="email"],
+.auth-form input[type="password"] {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--line-2);
+  color: var(--fg);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  font-family: inherit;
+  font-size: 14px;
+}
+.auth-form input:focus { outline: none; border-color: var(--fg-3); }
+.auth-form .checkbox-row {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--fg-2);
+  letter-spacing: 0;
+  text-transform: none;
+  cursor: pointer;
+}
+.auth-form .checkbox-row input { width: auto; margin: 3px 0 0; accent-color: var(--halo); }
+.auth-form .submit {
+  background: var(--fg); color: #0a0907;
+  border: none; padding: 12px 18px;
+  font-size: 13.5px; font-weight: 600;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+.auth-form .submit.secondary { background: transparent; color: var(--fg); border: 1px solid var(--line-2); }
+.auth-form .submit:disabled { opacity: 0.5; cursor: default; }
+.auth-form .error { color: var(--halo-2); font-size: 12px; margin: 0; }
+.auth-form .success { color: var(--ok); font-size: 13.5px; margin: 0; line-height: 1.5; }
+.auth-form .secondary-row {
+  display: flex; justify-content: space-between;
+  font-size: 12px;
+  color: var(--fg-3);
+}
+.auth-form .secondary-row button {
+  background: transparent; border: none; color: var(--fg-2);
+  font-size: 12px; cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+.auth-form .secondary-row button:hover { color: var(--fg); }
+
+/* ───────────────── Cart quantity, offer card, breakdown ───────────────── */
+.cart-line { grid-template-columns: 1fr auto auto auto; }
+.qty-stepper {
+  display: inline-flex; align-items: center;
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.qty-stepper button {
+  background: transparent; border: none; color: var(--fg-2);
+  width: 26px; height: 26px; cursor: pointer;
+  font-size: 14px; line-height: 1;
+}
+.qty-stepper button:hover { color: var(--fg); background: var(--bg-3); }
+.qty-stepper .qty-value {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 12px;
+  min-width: 22px;
+  text-align: center;
+}
+.offer-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--bg);
+  padding: 12px 14px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.offer-card.applied { border-color: color-mix(in oklab, var(--ok) 45%, var(--line)); }
+.offer-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.offer-name {
+  font-family: var(--font-display), sans-serif;
+  font-size: 14px; font-weight: 500;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.offer-name .check { color: var(--ok); display: inline-flex; }
+.offer-badge {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 11px;
+  color: var(--fg-3);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.offer-desc { margin: 0; font-size: 12.5px; color: var(--fg-3); }
+.offer-bar { height: 6px; border-radius: 3px; background: var(--bg-3); overflow: hidden; }
+.offer-bar-fill { height: 100%; background: var(--ok); transition: width 0.3s ease; }
+.offer-note {
+  margin: 0;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 11.5px;
+  color: var(--fg-2);
+}
+.offer-note.ok { color: var(--ok); }
+.breakdown { display: flex; flex-direction: column; gap: 6px; }
+.breakdown-row { display: flex; justify-content: space-between; font-size: 13px; color: var(--fg-2); }
+.breakdown-row .breakdown-label { color: var(--fg-3); }
+.breakdown-row.saving, .breakdown-row.saving .breakdown-label { color: var(--ok); }
+.breakdown .total { margin-top: 6px; }
+.breakdown-note { margin: 4px 0 0; font-size: 11.5px; color: var(--fg-4); text-align: center; }

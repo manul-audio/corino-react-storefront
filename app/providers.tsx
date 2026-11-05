@@ -7,7 +7,7 @@ import { CookieBanner } from '@/components/CookieBanner'
 import { CheckoutCompletion } from '@/components/CheckoutCompletion'
 import { DeepLinkCart } from '@/components/DeepLinkCart'
 import { DemoBanner } from '@/components/DemoBanner'
-import { LoginModal } from '@/components/LoginModal'
+import { AuthPanel } from '@/components/AuthPanel'
 import { ProductDownloadModal } from '@/components/ProductDownloadModal'
 import { SiteFooter } from '@/components/SiteFooter'
 import { SiteNav } from '@/components/SiteNav'
@@ -40,7 +40,7 @@ export function Providers({
           {children}
           <SiteFooter />
           <CartDrawer />
-          <LoginModal />
+          <AuthPanel />
           <ProductDownloadModal />
           <CookieBanner />
           <Suspense fallback={null}>

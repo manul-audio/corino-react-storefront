@@ -5,7 +5,7 @@ test('/account while signed out shows the gate and opens the login modal', async
   await expect(page.locator('main.account-page')).toBeVisible()
   await expect(page.locator('.account-signed-out')).toContainText('You need to be signed in')
   await page.locator('.account-signed-out').getByRole('button', { name: 'Sign in' }).click()
-  await expect(page.locator('form.modal')).toBeVisible()
+  await expect(page.getByRole('dialog', { name: 'Sign in' })).toBeVisible()
 })
 
 test('/account/products and /account/redeem are gated the same way', async ({ page }) => {

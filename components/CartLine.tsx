@@ -4,7 +4,7 @@ import { useBundle, useCart, useProduct, type LineItem } from '@moonbase.sh/reac
 import { formatCurrency } from '@/lib/format-currency'
 
 export function CartLine({ item }: { item: LineItem }) {
-  const { removeFromCart, currency } = useCart()
+  const { removeFromCart, setQuantity, currency } = useCart()
   const productId = item.type === 'Product' ? item.productId : ''
   const bundleId = item.type === 'Bundle' ? item.bundleId : ''
   const product = useProduct(productId)
@@ -16,14 +16,24 @@ export function CartLine({ item }: { item: LineItem }) {
   const amount = item.price?.[currency]
   const linePrice = typeof amount === 'number' ? formatCurrency(amount * item.quantity, currency) : null
 
+  function changeQuantity(delta: number) {
+    const next = item.quantity + delta
+    if (next <= 0) removeFromCart(item)
+    else setQuantity(item, next)
+  }
+
   return (
     <div className="cart-line">
       <div className="cart-line-product">
         <div className="cart-line-icon">{icon ? <img src={icon} alt={name} /> : null}</div>
         <div className="cart-line-meta">
           <span className="name">{name}</span>
-          {item.quantity > 1 ? <span className="qty">× {item.quantity}</span> : null}
         </div>
+      </div>
+      <div className="qty-stepper" role="group" aria-label="Quantity">
+        <button type="button" aria-label="Decrease quantity" onClick={() => changeQuantity(-1)}>−</button>
+        <span className="qty-value">{item.quantity}</span>
+        <button type="button" aria-label="Increase quantity" onClick={() => changeQuantity(1)}>+</button>
       </div>
       <span className="price">{linePrice}</span>
       <button className="remove" type="button" aria-label="Remove" onClick={() => removeFromCart(item)}>
