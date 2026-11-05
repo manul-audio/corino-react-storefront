@@ -2,13 +2,16 @@
 
 import { useAuth, useCart } from '@moonbase.sh/react'
 import Link from 'next/link'
+import { useEmbedMode } from '@/lib/embed-mode'
 import { useUi } from '@/lib/ui-context'
 
 export function SiteNav() {
   const { user, loaded } = useAuth()
   const { items } = useCart()
   const { showCart, showLogin } = useUi()
-  const cartCount = items.reduce((sum, item) => sum + (item.quantity ?? 1), 0)
+  const { mode } = useEmbedMode()
+  // The embedded storefront keeps its own cart, so our count would not match it.
+  const cartCount = mode === 'embedded' ? 0 : items.reduce((sum, item) => sum + (item.quantity ?? 1), 0)
 
   return (
     <nav className="top">

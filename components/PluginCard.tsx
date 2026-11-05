@@ -3,6 +3,7 @@
 import { useCart, useProduct } from '@moonbase.sh/react'
 import type { ReactNode } from 'react'
 import { formatCurrency } from '@/lib/format-currency'
+import { useAddToCart } from '@/lib/use-add-to-cart'
 import { useUi } from '@/lib/ui-context'
 
 export interface PluginCardProps {
@@ -34,8 +35,9 @@ const DOWNLOAD = (
 export function PluginCard(props: PluginCardProps) {
   const { productId, variant, reverse, fallbackPrice, fallbackOriginalPrice } = props
   const product = useProduct(productId)
-  const { currency, addToCart } = useCart()
-  const { showCart, showDownloads } = useUi()
+  const { currency } = useCart()
+  const { showDownloads } = useUi()
+  const addToCart = useAddToCart()
 
   const variation = product?.defaultVariation ?? null
   const price = variation ? formatCurrency(variation.price[currency], currency) : fallbackPrice
@@ -49,7 +51,6 @@ export function PluginCard(props: PluginCardProps) {
   function handleAddToCart() {
     if (!product) return
     addToCart(product)
-    showCart()
   }
 
   return (

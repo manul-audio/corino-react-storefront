@@ -1,6 +1,7 @@
 'use client'
 
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react'
+import { useEmbedMode } from '@/lib/embed-mode'
 
 export type DownloadModalMode = 'trial' | 'owned'
 export type AuthView = 'sign-in' | 'create-account' | 'forgot-password'
@@ -30,19 +31,34 @@ const initialState: UiState = { cartOpen: false, loginOpen: false, authView: 'si
 
 export function UiProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<UiState>(initialState)
+  // In embedded mode these open Moonbase's own panels instead of ours.
+  const { mode, withEmbed } = useEmbedMode()
+  const embedded = mode === 'embedded'
 
-  const showCart = useCallback(() => setState((s) => ({ ...s, cartOpen: true })), [])
+  const showCart = useCallback(() => {
+    if (embedded) withEmbed((moonbase) => moonbase.view_cart())
+    else setState((s) => ({ ...s, cartOpen: true }))
+  }, [embedded, withEmbed])
   const hideCart = useCallback(() => setState((s) => ({ ...s, cartOpen: false })), [])
-  const showLogin = useCallback(() => setState((s) => ({ ...s, loginOpen: true, authView: 'sign-in' })), [])
+  const showLogin = useCallback(() => {
+    if (embedded) withEmbed((moonbase) => moonbase.sign_in())
+    else setState((s) => ({ ...s, loginOpen: true, authView: 'sign-in' }))
+  }, [embedded, withEmbed])
   const hideLogin = useCallback(() => setState((s) => ({ ...s, loginOpen: false, authView: 'sign-in' })), [])
   const setAuthView = useCallback((view: AuthView) => setState((s) => ({ ...s, authView: view })), [])
   const showTrial = useCallback(
-    (productId: string) => setState((s) => ({ ...s, downloadModal: { productId, mode: 'trial' } })),
-    [],
+    (productId: string) => {
+      if (embedded) withEmbed((moonbase) => moonbase.view_product({ product_id: productId }))
+      else setState((s) => ({ ...s, downloadModal: { productId, mode: 'trial' } }))
+    },
+    [embedded, withEmbed],
   )
   const showDownloads = useCallback(
-    (productId: string) => setState((s) => ({ ...s, downloadModal: { productId, mode: 'owned' } })),
-    [],
+    (productId: string) => {
+      if (embedded) withEmbed((moonbase) => moonbase.view_product({ product_id: productId }))
+      else setState((s) => ({ ...s, downloadModal: { productId, mode: 'owned' } }))
+    },
+    [embedded, withEmbed],
   )
   const hideDownloadModal = useCallback(() => setState((s) => ({ ...s, downloadModal: null })), [])
 

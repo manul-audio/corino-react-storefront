@@ -4,7 +4,7 @@ import type { Metadata } from 'next'
 import { Inter, JetBrains_Mono, Space_Grotesk } from 'next/font/google'
 import { cookies } from 'next/headers'
 import { Unavailable, type UnavailableKind } from '@/components/Unavailable'
-import { resolveMoonbaseEndpoint } from '@/lib/env'
+import { resolveDefaultUiMode, resolveMoonbaseEndpoint } from '@/lib/env'
 import { Providers } from './providers'
 import './globals.css'
 
@@ -44,7 +44,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="en" className={`${inter.variable} ${grotesk.variable} ${mono.variable}`}>
       <body>
         {result.kind === 'ok' ? (
-          <Providers endpoint={result.endpoint} initialState={result.initialState}>
+          <Providers endpoint={result.endpoint} initialState={result.initialState} defaultMode={resolveDefaultUiMode()}>
             {children}
           </Providers>
         ) : (

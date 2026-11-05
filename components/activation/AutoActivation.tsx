@@ -4,6 +4,7 @@ import { ActivationRequestStatus, useActivationRequest, useAuth, useCart, usePro
 import { useRouter } from 'next/navigation'
 import { useEffect, useState, type ReactNode } from 'react'
 import { ActivationProductCard } from '@/components/activation/ProductCard'
+import { useEmbedMode } from '@/lib/embed-mode'
 import { formatCurrency } from '@/lib/format-currency'
 import { useUi } from '@/lib/ui-context'
 
@@ -12,6 +13,7 @@ export function AutoActivation({ token }: { token: string }) {
   const { user, loaded: userLoaded, signOut } = useAuth()
   const { showLogin, showCart } = useUi()
   const { currency, addToCart, setQuantity } = useCart()
+  const { mode, withEmbed } = useEmbedMode()
   const { activationRequest, loading, fulfilling, completing, error, fulfillLicense, fulfillTrial } = useActivationRequest(token)
   const [newsletterOptIn, setNewsletterOptIn] = useState(false)
   const [activationError, setActivationError] = useState<string | null>(null)
@@ -39,6 +41,10 @@ export function AutoActivation({ token }: { token: string }) {
 
   function buy() {
     if (!storefrontProduct) return
+    if (mode === 'embedded') {
+      withEmbed((moonbase) => moonbase.add_to_cart({ product_id: storefrontProduct.id, quantity: 1, show_cart: true }))
+      return
+    }
     const item = addToCart(storefrontProduct)
     setQuantity(item, 1)
     showCart()
