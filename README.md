@@ -1,5 +1,7 @@
 # Corino React storefront
 
+**Live demo:** https://corino-react-storefront.vercel.app
+
 A reference implementation of the [`@moonbase.sh/react`](https://github.com/manul-audio/moonbase-react) SDK on Next.js 16, dressed up as the storefront of **Corino Studio**, a fictional Oslo audio-plugin company selling two plugins (HALO, a saturator, and DRIFT, a granular reverb) plus a bundle. It follows the design of Moonbase's own Corino reference sites so the three can be compared side by side.
 
 It shows what a server-rendered React site built on Moonbase looks like end to end: landing page with live pricing, cart drawer, embedded checkout, login, product downloads, an account area with licence activation, and the callback pages Moonbase's hosted flows redirect to, with the catalog and user state hydrated on the server so the first paint is real data.
