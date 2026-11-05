@@ -75,3 +75,17 @@ test('the drawer is a dialog and closes on Escape', async ({ page }) => {
   await page.keyboard.press('Escape')
   await expect(drawer).toHaveCount(0)
 })
+
+test('a bundle line lists its products behind a Show/Hide toggle', async ({ page }) => {
+  await page.goto('/?add_bundle=duo-bundle')
+  const drawer = page.locator('aside.drawer')
+  const toggle = drawer.getByRole('button', { name: /2 products/ })
+  await expect(toggle).toBeVisible()
+  await expect(drawer.locator('.bundle-product-list')).toHaveCount(0)
+  await toggle.click()
+  await expect(drawer.locator('.bundle-product-list li')).toHaveCount(2)
+  await expect(drawer.locator('.bundle-product-list')).toContainText('HALO')
+  await expect(drawer.locator('.bundle-product-list')).toContainText('DRIFT')
+  await toggle.click()
+  await expect(drawer.locator('.bundle-product-list')).toHaveCount(0)
+})
