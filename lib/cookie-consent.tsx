@@ -13,10 +13,8 @@ export function readStoredConsent(): boolean | null {
 }
 
 interface ConsentApi {
-  /** Whether the store needs this visitor's consent before keeping ad click IDs. */
-  required: boolean
   answer: boolean | null
-  /** Banner visibility: reopened from the footer, or required and unanswered. */
+  /** Banner visibility: every visitor is asked until they answer; the footer can reopen it. */
   open: boolean
   setAnswer: (granted: boolean) => void
   reopen: () => void
@@ -32,20 +30,11 @@ export function CookieConsentProvider({
   children: ReactNode
 }) {
   const { context } = useStorefront()
-  const [required, setRequired] = useState(false)
   const [answer, setAnswerState] = useState<boolean | null>(initialAnswer)
   const [reopened, setReopened] = useState(false)
 
-  // The SSR catalog was fetched from the server's location; the browser's own
-  // catalog load says whether THIS visitor needs to be asked.
-  useEffect(
-    () => context.onStorefrontUpdated((catalog) => setRequired(catalog.cookieConsentRequired !== false)),
-    [context],
-  )
-
   // The SSR catalog reflects the server's location. Refetch once in the browser so
-  // cookieConsentRequired and suggestedCurrency are this visitor's; the subscription
-  // above is already in place when this runs.
+  // the display currency and the store's attribution setting are this visitor's.
   useEffect(() => {
     void context.updateStorefront().catch(() => {})
   }, [context])
@@ -62,8 +51,8 @@ export function CookieConsentProvider({
   const reopen = useCallback(() => setReopened(true), [])
 
   const api = useMemo<ConsentApi>(
-    () => ({ required, answer, open: reopened || (required && answer === null), setAnswer, reopen }),
-    [required, answer, reopened, setAnswer, reopen],
+    () => ({ answer, open: reopened || answer === null, setAnswer, reopen }),
+    [answer, reopened, setAnswer, reopen],
   )
 
   return <ConsentContext.Provider value={api}>{children}</ConsentContext.Provider>
